@@ -9,7 +9,7 @@ import re
 def connect():
     uspass = 'rohit8982'
     connect = f"mongodb+srv://rohit8982:{uspass}@cluster0.lyn00.mongodb.net/"
-    client = MongoClient(connect)
+    client = MongoClient(connect , serverSelectionTimeoutMS=5000)
     print("Connected to MongoDB")
     db = client['MG']  # Replace with your database name
     return db
@@ -72,3 +72,19 @@ def get_next_invoice_number():
 
     return {"invoice_number": next_invoice}
     # return {"last_invoice_number": last_invoice_number,"invoice_number": next_invoice}
+
+def convert_objectid(data):
+    if isinstance(data, list):
+        for item in data:
+            item['_id'] = str(item['_id'])
+    else:
+        data['_id'] = str(data['_id'])
+    return data
+
+def get_invoice_list():
+    db = connect()
+
+    collection = db['invoice']
+    data = list(collection.find())
+
+    return convert_objectid(data)

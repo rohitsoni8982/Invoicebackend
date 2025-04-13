@@ -18,7 +18,6 @@ app.add_middleware(
 )
 class Product(BaseModel):
     name: str
-    price: str
     hsn: str
     taxable_value: str
     cgst_rate: str
@@ -66,10 +65,15 @@ def Add_Invoice(data: Dict[Any, Any]):
 @app.post("/product")
 def Product(data: Dict[Any, Any]):
     data = dict(data)
-    data = databassconnection.data_store(data)
+    data = databassconnection.product_data_store(data)
     return "successfully data stored"
 
 @app.get("/last_invoice")
 def last_invoice():
     data = databassconnection.get_next_invoice_number()
+    return data
+
+@app.get("/invoice_list")
+def invoice_list():
+    data = databassconnection.get_invoice_list()
     return data
