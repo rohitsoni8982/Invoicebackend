@@ -65,7 +65,24 @@ def Add_Invoice(data: Dict[Any, Any]):
 @app.post("/product")
 def Product(data: Dict[Any, Any]):
     data = dict(data)
+    
+    if not data.get("name"):
+        return {"error": "name is required"}
+    if not data.get("hsn"):
+        return {"error": "hsn is required"}
+    if not data.get("taxable_value"):
+        return {"error": "taxable_value is required"}
+    if not data.get("cgst_rate"):
+        return {"error": "cgst_rate is required"}
+    if not data.get("cgst_amount"):
+        return {"error": "cgst_amount is required"}
+    if not data.get("sgst_rate"):
+        return {"error": "sgst_rate is required"}
+    if not data.get("sgst_amount"):
+        return {"error": "sgst_amount is required"}
+    
     data = databassconnection.product_data_store(data)
+    
     return "successfully data stored"
 
 @app.get("/last_invoice")
