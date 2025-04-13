@@ -94,3 +94,8 @@ def last_invoice():
 def invoice_list():
     data = databassconnection.get_invoice_list()
     return data
+
+@app.get("/product_list")
+def product_list():
+    data = databassconnection.get_product_list()
+    return data   

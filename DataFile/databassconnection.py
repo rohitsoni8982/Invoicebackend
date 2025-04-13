@@ -88,3 +88,17 @@ def get_invoice_list():
     data = list(collection.find())
 
     return convert_objectid(data)
+
+def product_data_store(product_data):
+    db = connect()
+    collection = db['product']
+    collection.insert_one(product_data)
+    print(product_data)
+    return ''
+
+def get_product_list():
+    db = connect()
+    collection = db['product']
+    data = list(collection.find())
+    return convert_objectid(data)
+
