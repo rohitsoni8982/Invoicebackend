@@ -22,31 +22,6 @@ def Invoice_data_store(add_card_data):
     print(add_card_data)
     return ''
 
-# def get_invoice_number():
-#     db = connect()
-#     collection = db['invoice']  # using your actual collection
-
-#     current_year = str(datetime.now().year)
-#     prefix = f"MG/{current_year}/"
-
-#     # Get the latest invoice sorted by invoice_number
-#     latest_invoice = collection.find({"invoice_number": {"$regex": f"^MG/{current_year}/"}}).sort("invoice_number", DESCENDING).limit(1)
-#     latest_invoice_list = list(latest_invoice)
-
-#     if latest_invoice_list:
-#         last_invoice_number = latest_invoice_list[0].get("invoice_number", "")
-#         match = re.search(rf"MG/{current_year}/(\d+)", last_invoice_number)
-
-#         if match:
-#             last_number = int(match.group(1)) + 1
-#             next_invoice = f"{prefix}{str(last_number).zfill(6)}"
-#         else:
-#             next_invoice = f"{prefix}000001"
-#     else:
-#         next_invoice = f"{prefix}000001"
-
-#     return {"invoice_number": next_invoice}
-
 def get_next_invoice_number():
     db = connect()
     collection = db['invoice']  # Replace with your actual collection

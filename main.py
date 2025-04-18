@@ -20,10 +20,7 @@ class Product(BaseModel):
     name: str
     hsn: str
     taxable_value: str
-    cgst_rate: str
-    cgst_amount: str
-    sgst_rate: str
-    sgst_amount: str
+    gst : str
 
 
 class Add_Invoice(BaseModel):
@@ -33,6 +30,7 @@ class Add_Invoice(BaseModel):
     billing_name: str
     billing_address: str
     billing_phone_number: str
+    billing_gst_number: str
     items: List[Dict] 
 
 @app.get("/your-endpoint")
@@ -55,6 +53,8 @@ def Add_Invoice(data: Dict[Any, Any]):
         return {"error": "billing_address is required"}
     if not data.get("billing_phone_number"):
         return {"error": "billing_number is required"}
+    if not data.get("billing_gst_number"):
+        return {"error": "billing_gst_number is required"}
     if not data.items:
         return {"error": "items is required"}
     
@@ -70,16 +70,8 @@ def Product(data: Dict[Any, Any]):
         return {"error": "name is required"}
     if not data.get("hsn"):
         return {"error": "hsn is required"}
-    if not data.get("taxable_value"):
-        return {"error": "taxable_value is required"}
-    if not data.get("cgst_rate"):
-        return {"error": "cgst_rate is required"}
-    if not data.get("cgst_amount"):
-        return {"error": "cgst_amount is required"}
-    if not data.get("sgst_rate"):
-        return {"error": "sgst_rate is required"}
-    if not data.get("sgst_amount"):
-        return {"error": "sgst_amount is required"}
+    if not data.get("gst"):
+        return {"error": "gst is required"}
     
     data = databassconnection.product_data_store(data)
     
