@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: fastapi-service              # <-- You can change this name
+    env: python
+    plan: free                         # or 'starter', 'standard', etc.
+    buildCommand: ""                   # Empty unless you need to run a build step
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    autoDeploy: true                   # Automatically redeploy on git push
