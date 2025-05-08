@@ -22,6 +22,14 @@ def Invoice_data_store(add_card_data):
     print(add_card_data)
     return ''
 
+def Credit_data_store(add_card_data):
+    db = connect()
+    # check is vehicle already registred or not
+    collection = db['credit']
+    collection.insert_one(add_card_data)
+    print(add_card_data)
+    return ''
+
 def get_next_invoice_number():
     db = connect()
     collection = db['invoice']  # Replace with your actual collection
@@ -46,7 +54,32 @@ def get_next_invoice_number():
         next_invoice = f"{prefix}000001"
 
     return {"invoice_number": next_invoice}
-    # return {"last_invoice_number": last_invoice_number,"invoice_number": next_invoice}
+
+
+def get_next_credit_number():
+    db = connect()
+    collection = db['credit']
+
+    current_year = str(datetime.now().year)
+    prefix = f"CN/{current_year}/"
+
+    # Get the latest invoice sorted by credit_number
+    latest_credit = collection.find({"credit_number": {"$regex": f"^CN/{current_year}/"}}).sort("credit_number", DESCENDING).limit(1)
+    latest_credit_list = list(latest_credit)
+
+    if latest_credit_list:
+        last_credit_number = latest_credit_list[0].get("credit_number", "")
+        match = re.search(rf"CN/{current_year}/(\d+)", last_credit_number)
+
+        if match:
+            last_number = int(match.group(1)) + 1
+            next_credit = f"{prefix}{str(last_number).zfill(6)}"
+        else:
+            next_credit = f"{prefix}000001"
+    else:
+        next_credit = f"{prefix}000001"
+
+    return {"credit_number": next_credit}
 
 def convert_objectid(data):
     if isinstance(data, list):

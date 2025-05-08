@@ -11,7 +11,7 @@ origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,7 +31,20 @@ class Add_Invoice(BaseModel):
     billing_address: str
     billing_phone_number: str
     billing_gst_number: str
-    items: List[Dict] 
+    items: List[Dict]
+
+class Add_CreditNote(BaseModel):
+    creadit_note_data : str
+    credit_number : str
+    billing_name : str
+    billing_phone_number : str
+    billing_address : str
+    billing_gst_number : str
+    invoice_number : str
+    credit_amount : str
+    description : str  
+    invoice_date : str
+
 
 @app.get("/your-endpoint")
 async def your_get_method():
@@ -59,6 +72,35 @@ def Add_Invoice(data: Dict[Any, Any]):
         return {"error": "items is required"}
     
     data = databassconnection.Invoice_data_store(data)
+
+    return "successfully data stored"
+
+@app.post("/credit_note")
+def Add_CreditNote(data: Dict[Any, Any]):
+    data = dict(data)
+
+    if not data.get("creadit_note_data"):
+        return {"error": "creadit_note_data is required"}
+    if not data.get("credit_number"):
+        return {"error": "credit_number is required"}
+    if not data.get("invoice_number"):
+        return {"error": "invoice_number is required"}
+    if not data.get("billing_name"):
+        return {"error": "billing_name is required"}
+    if not data.get("billing_address"):
+        return {"error": "billing_address is required"}
+    if not data.get("billing_phone_number"):
+        return {"error": "billing_number is required"}
+    if not data.get("billing_gst_number"):
+        return {"error": "billing_gst_number is required"}
+    if not data.get("credit_amount"):
+        return {"error": "credit_amount is required"}
+    if not data.get("description"):
+        return {"error": "description is required"}
+    if not data.get("invoice_date"):
+        return {"error": "invoice_date is required"}
+    
+    data = databassconnection.Credit_data_store(data)
 
     return "successfully data stored"
 
