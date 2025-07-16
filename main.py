@@ -22,6 +22,14 @@ class Product(BaseModel):
     taxable_value: str
     gst : str
 
+class Client(BaseModel):
+    id: str
+    billing_name: str
+    billing_phone_number: str
+    billing_address: str
+    billing_gst_number : str
+    billing_state_code : str
+
 
 class Add_Invoice(BaseModel):
     invoice_to_date: str
@@ -119,6 +127,29 @@ def Product(data: Dict[Any, Any]):
     
     return "successfully data stored"
 
+@app.post("/client_details")
+def Client(data: Dict[Any, Any]):
+    data = dict(data)
+    # Always generate the next id automatically
+    data["id"] = databassconnection.get_next_client_id()
+    if not data.get("billing_name"):
+        return {"error": "billing_name is required"}
+    if not data.get("billing_phone_number"):
+        return {"error": "billing_phone_number is required"}
+    if not data.get("billing_address"):
+        return {"error": "billing_address is required"}
+    if not data.get("billing_gst_number"):
+        return {"error": "billing_gst_number is required"}
+    if not data.get("billing_state_code"):
+        return {"error": "billing_state_code is required"}
+    data = databassconnection.client_data_store(data)
+    return "successfully data stored"
+
+@app.get("/get_client_list")
+def client_list():
+    data = databassconnection.get_client_list()
+    return data
+
 @app.get("/last_invoice")
 def last_invoice():
     data = databassconnection.get_next_invoice_number()
@@ -132,4 +163,4 @@ def invoice_list():
 @app.get("/product_list")
 def product_list():
     data = databassconnection.get_product_list()
-    return data   
+    return data 

@@ -104,9 +104,38 @@ def product_data_store(product_data):
     print(product_data)
     return ''
 
+def client_data_store(cilent_data):
+    db = connect()
+    collection = db['client_details']
+    collection.insert_one(cilent_data)
+    print(cilent_data)
+    return ''
+
+def get_client_list():
+    db = connect()
+    collection = db['client_details']
+    data = list(collection.find())
+    return convert_objectid(data)
+
 def get_product_list():
     db = connect()
     collection = db['product']
     data = list(collection.find())
     return convert_objectid(data)
+
+def get_next_client_id():
+    db = connect()
+    collection = db['client_details']
+    # Find the client with the highest numeric id
+    latest_client = collection.find({"id": {"$exists": True}}).sort("id", DESCENDING).limit(1)
+    latest_client_list = list(latest_client)
+    if latest_client_list:
+        try:
+            last_id = int(latest_client_list[0].get("id", "0"))
+        except ValueError:
+            last_id = 0
+        next_id = str(last_id + 1)
+    else:
+        next_id = "1"
+    return next_id
 
